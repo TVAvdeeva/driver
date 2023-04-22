@@ -10,6 +10,8 @@
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencies>
@@ -17,7 +19,7 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.9.2</version>
-            <scope>driver</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
@@ -38,7 +40,7 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.4.6</version>
-            <scope>webdriver</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.aeonbits.owner</groupId>
