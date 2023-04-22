@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 public class WebDriverTest {
     protected  WebDriver driver;
-   // mvn clean test -Dlogin=websbor@bk.ru -Dpassword=Cjgkz2727!!!
     private final String login=System.getProperty("login");
     private final String password = System.getProperty("password");
     private static Logger logger = LogManager.getLogger(WebDriverTest.class);
