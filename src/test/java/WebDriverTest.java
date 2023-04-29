@@ -35,19 +35,23 @@ public class WebDriverTest {
     private void authUser() throws InterruptedException {
         driver.findElement(By.cssSelector(".header3__button-sign-in")).click();
         WebElement form = driver.findElement(By.xpath("//form[@action = '/login/']"));
-        Thread.sleep(100);
         form.findElement(By.xpath(".//input[@name='email']")).sendKeys(login);
         form.findElement(By.xpath(".//input[@name='password']")).sendKeys(password);
         form.findElement(By.xpath(".//button[@type='submit']")).click();
 
     }
+ private void convertUrl() {
 
+     if (url.trim().endsWith("/")) {
+         url= substring(url,0,url.length()-1);
+     }
+     url=url.toLowerCase();
+
+    }
     @BeforeAll
     public static void beforeTest() {
         WebDriverManager.chromedriver().setup();
-
-
-    }
+   }
 
     @BeforeEach
     public void beforeEachTest() {
@@ -60,34 +64,34 @@ public class WebDriverTest {
         options.addArguments("--headless");
         options.addArguments("--start-maximized");
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(1000, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(500, TimeUnit.SECONDS);
         driver.get("https://duckduckgo.com");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(150));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("search_form_input_homepage")));
         clearAndEnter(By.id("search_form_input_homepage"), "ОТУС");
         driver.findElement(By.id("search_button_homepage")).submit();
-        Thread.sleep(1000);
+        Thread.sleep(700);
         String element = driver.findElement(By.xpath("//article[@id='r1-0']/div[2]/h2/a/span")).getText();
         assertEquals("Онлайн‑курсы для профессионалов, дистанционное обучение современным ...", element);
 
     }
 
-    // @Test-   сайт упал!!! :((
-    // public void kioskTest() {
-    //     driver = new ChromeDriver(options);
-    //     driver.get("https://demo.w3layouts.com/demos_new/template_demo/03-10-2020/photoflash-liberty-demo_Free/685659620/web/index.html?_ga=2.181802926.889871791.1632394818-2083132868.1632394818");
-    //  driver.findElement(By.xpath("//span[@class='image-block']/a")).click();
-    //    WebElement element = driver.findElement(By.cssSelector("div.pp_pic_holder.light_rounded"));
-    //    Assertions.assertTrue(element.isDisplayed());
-
-    //  }
+     @Test
+     public void kioskTest() throws InterruptedException {
+        driver = new ChromeDriver(options);
+        driver.manage().timeouts().implicitlyWait(1000, TimeUnit.SECONDS);
+        driver.get("http://kartushin.space/lesson/");
+        driver.findElement(By.xpath("//span[@class='image-block']/a")).click();
+        Thread.sleep(700);
+        WebElement element = driver.findElement(By.cssSelector("div.pp_pic_holder.light_rounded"));
+        Assertions.assertTrue(element.isDisplayed());
+        logger.info("Is element visible on webpage: " + element.isDisplayed());
+     }
 
     @Test
     public void otusTest() throws InterruptedException {
 
-         if (url.trim().endsWith("/")) {
-            url= substring(url,0,url.length()-1);
-        }
+        convertUrl();
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(1000, TimeUnit.SECONDS);
         driver.get(url);
