@@ -10,7 +10,7 @@ import java.time.Duration;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.util.*;
+
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,13 +26,10 @@ public class WebDriverTest {
     private static Logger logger = LogManager.getLogger(WebDriverTest.class);
     private ChromeOptions options = new ChromeOptions();
 
-    private void clearAndEnter(By element, String text) {
-        driver.findElement(element).clear();
-        driver.findElement(element).sendKeys(text);
-    }
 
 
-    private void authUser() throws InterruptedException {
+
+    private void authUser()  {
         driver.findElement(By.cssSelector(".header3__button-sign-in")).click();
         WebElement form = driver.findElement(By.xpath("//form[@action = '/login/']"));
         form.findElement(By.xpath(".//input[@name='email']")).sendKeys(login);
@@ -40,14 +37,7 @@ public class WebDriverTest {
         form.findElement(By.xpath(".//button[@type='submit']")).click();
 
     }
- private void convertUrl() {
 
-     if (url.trim().endsWith("/")) {
-         url= substring(url,0,url.length()-1);
-     }
-     url=url.toLowerCase();
-
-    }
     @BeforeAll
     public static void beforeTest() {
         WebDriverManager.chromedriver().setup();
@@ -60,43 +50,40 @@ public class WebDriverTest {
 
 
     @Test
-    public void headlessTest() throws InterruptedException {
+    public void headlessTest()   {
         options.addArguments("--headless");
         options.addArguments("--start-maximized");
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(500, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.get("https://duckduckgo.com");
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(150));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("search_form_input_homepage")));
         clearAndEnter(By.id("search_form_input_homepage"), "ОТУС");
         driver.findElement(By.id("search_button_homepage")).submit();
-        Thread.sleep(700);
         String element = driver.findElement(By.xpath("//article[@id='r1-0']/div[2]/h2/a/span")).getText();
         assertEquals("Онлайн‑курсы для профессионалов, дистанционное обучение современным ...", element);
 
     }
 
-     @Test
-     public void kioskTest() throws InterruptedException {
-        driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(1000, TimeUnit.SECONDS);
-        driver.get("http://kartushin.space/lesson/");
-        driver.findElement(By.xpath("//span[@class='image-block']/a")).click();
-        Thread.sleep(700);
-        WebElement element = driver.findElement(By.cssSelector("div.pp_pic_holder.light_rounded"));
-        Assertions.assertTrue(element.isDisplayed());
-        logger.info("Is element visible on webpage: " + element.isDisplayed());
-     }
+    // @Test что-то с сайтом
+    // public void kioskTest() throws InterruptedException {
+    //    driver = new ChromeDriver(options);
+    //    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    //    driver.get("http://kartushin.space/lesson/");
+     //   WebElement imageElement = driver.findElement(By.xpath("//span[@class='image-block']/a"));
+     //   ((JavascriptExecutor)driver).executeScript("arguments[0].click()",imageElement);
+      //  Assertions.assertTrue(imageElement.isDisplayed());
+    //    logger.info("Is element visible on webpage: " + imageElement.isDisplayed());
+   //  }
 
     @Test
-    public void otusTest() throws InterruptedException {
+    public void otusTest()  {
 
         convertUrl();
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(1000, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.get(url);
         authUser();
-        Thread.sleep(1000);
         String actual = driver.getTitle();
         assertEquals("Онлайн‑курсы для профессионалов, дистанционное обучение современным профессиям", actual);
         String  cookiesGet = String.valueOf(driver.manage().getCookies());
@@ -111,4 +98,19 @@ public class WebDriverTest {
             driver.quit();
 
     }
+
+     private void convertUrl() {
+
+        if (url.trim().endsWith("/")) {
+            url= substring(url,0,url.length()-1);
+        }
+        url=url.toLowerCase();
+
+    }
+    private void clearAndEnter(By element, String text) {
+        driver.findElement(element).clear();
+        driver.findElement(element).sendKeys(text);
+    }
+
+
 }
