@@ -12,8 +12,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-import java.util.concurrent.TimeUnit;
-
 import static org.apache.commons.lang3.StringUtils.substring;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,11 +28,12 @@ public class WebDriverTest {
 
 
     private void authUser()  {
-        driver.findElement(By.cssSelector(".header3__button-sign-in")).click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".header3__button-sign-in"))).click();
         WebElement form = driver.findElement(By.xpath("//form[@action = '/login/']"));
         form.findElement(By.xpath(".//input[@name='email']")).sendKeys(login);
         form.findElement(By.xpath(".//input[@name='password']")).sendKeys(password);
-        form.findElement(By.xpath(".//button[@type='submit']")).click();
+        form.findElement(By.xpath(".//button[@type='submit']")).submit();
 
     }
 
@@ -54,9 +53,8 @@ public class WebDriverTest {
         options.addArguments("--headless");
         options.addArguments("--start-maximized");
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.get("https://duckduckgo.com");
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("search_form_input_homepage")));
         clearAndEnter(By.id("search_form_input_homepage"), "ОТУС");
         driver.findElement(By.id("search_button_homepage")).submit();
@@ -66,14 +64,25 @@ public class WebDriverTest {
     }
 
      @Test
-    public void kioskTest() throws InterruptedException {
+     public void kioskTest()  {
          driver = new ChromeDriver(options);
-         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
          driver.get("http://kartushin.space/lesson/");
-          WebElement imageElement = driver.findElement(By.xpath("//span[@class='image-block']/a"));
-          ((JavascriptExecutor)driver).executeScript("arguments[0].click()",imageElement);
-          Assertions.assertTrue(imageElement.isDisplayed());
-        logger.info("Is element visible on webpage: " + imageElement.isDisplayed());
+
+     //    By imageElementSecond = driver.findElement(By.xpath("//div[@class='pp_hoverContainer']"));
+
+
+         By imageElementSecond = By.xpath("//div[@class='pp_hoverContainer']");
+         JavascriptExecutor js = (JavascriptExecutor)driver;
+         WebElement imageElement = driver.findElement(By.xpath("//img[@src='index_files/p1.jpg']"));
+         js.executeScript("arguments[0].click()", imageElement);
+
+
+         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+         wait.until(ExpectedConditions.visibilityOf(driver.findElement(imageElementSecond)));
+
+
+         Assertions.assertTrue(driver.findElement(imageElementSecond).isDisplayed());
+         logger.info("Is element visible on webpage: " + imageElement.isDisplayed());
     }
 
     @Test
@@ -81,13 +90,11 @@ public class WebDriverTest {
 
         convertUrl();
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.get(url);
         authUser();
         String actual = driver.getTitle();
         assertEquals("Онлайн‑курсы для профессионалов, дистанционное обучение современным профессиям", actual);
         String  cookiesGet = String.valueOf(driver.manage().getCookies());
-
         logger.info(cookiesGet);
 
     }
@@ -111,6 +118,5 @@ public class WebDriverTest {
         driver.findElement(element).clear();
         driver.findElement(element).sendKeys(text);
     }
-
 
 }
