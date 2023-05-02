@@ -65,16 +65,16 @@ public class WebDriverTest {
 
     }
 
-    // @Test что-то с сайтом
-    // public void kioskTest() throws InterruptedException {
-    //    driver = new ChromeDriver(options);
-    //    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-    //    driver.get("http://kartushin.space/lesson/");
-     //   WebElement imageElement = driver.findElement(By.xpath("//span[@class='image-block']/a"));
-     //   ((JavascriptExecutor)driver).executeScript("arguments[0].click()",imageElement);
-      //  Assertions.assertTrue(imageElement.isDisplayed());
-    //    logger.info("Is element visible on webpage: " + imageElement.isDisplayed());
-   //  }
+     @Test
+    public void kioskTest() throws InterruptedException {
+         driver = new ChromeDriver(options);
+         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+         driver.get("http://kartushin.space/lesson/");
+          WebElement imageElement = driver.findElement(By.xpath("//span[@class='image-block']/a"));
+          ((JavascriptExecutor)driver).executeScript("arguments[0].click()",imageElement);
+          Assertions.assertTrue(imageElement.isDisplayed());
+        logger.info("Is element visible on webpage: " + imageElement.isDisplayed());
+    }
 
     @Test
     public void otusTest()  {
