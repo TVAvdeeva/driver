@@ -16,7 +16,7 @@ import static org.apache.commons.lang3.StringUtils.substring;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WebDriverTest {
-    protected  WebDriver driver;
+    private   WebDriver driver;
     private final String login=System.getProperty("login");
     private final String password = System.getProperty("password");
      private String  url=System.getProperty("url");
@@ -67,8 +67,6 @@ public class WebDriverTest {
      public void kioskTest()  {
          driver = new ChromeDriver(options);
          driver.get("http://kartushin.space/lesson/");
-
-     //    By imageElementSecond = driver.findElement(By.xpath("//div[@class='pp_hoverContainer']"));
 
 
          By imageElementSecond = By.xpath("//div[@class='pp_hoverContainer']");
